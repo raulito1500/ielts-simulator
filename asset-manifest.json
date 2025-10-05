@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/ielts-simulator/static/css/main.f831d3df.css",
+    "main.js": "/ielts-simulator/static/js/main.1e1408e9.js",
+    "static/js/453.3270ff94.chunk.js": "/ielts-simulator/static/js/453.3270ff94.chunk.js",
+    "index.html": "/ielts-simulator/index.html",
+    "main.f831d3df.css.map": "/ielts-simulator/static/css/main.f831d3df.css.map",
+    "main.1e1408e9.js.map": "/ielts-simulator/static/js/main.1e1408e9.js.map",
+    "453.3270ff94.chunk.js.map": "/ielts-simulator/static/js/453.3270ff94.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f831d3df.css",
+    "static/js/main.1e1408e9.js"
+  ]
+}
