@@ -22,8 +22,8 @@
 | Section | Status |
 |---------|--------|
 | Writing — Task 1 | ✅ Live |
-| Writing — Task 2 | 🚧 In development |
-| Listening — Full Test | 🚧 In development |
+| Writing — Task 2 | ✅ Live |
+| Listening — Full Test | ✅ Live |
 | Reading — Passages 1, 2 & 3 | 🚧 In development |
 | Speaking — Parts 1, 2 & 3 | 🚧 In development |
 
