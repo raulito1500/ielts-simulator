@@ -165,7 +165,7 @@ export default function App() {
         const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
 
         try {
-            const apiKey = ""; 
+            const apiKey = process.env.REACT_APP_GEMINI_API_KEY;
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
             
             const response = await fetch(apiUrl, {
@@ -215,7 +215,7 @@ export default function App() {
         const userQuery = `My essay is:\n---\n${text}\n---`;
 
         try {
-            const apiKey = "";
+            const apiKey = process.env.REACT_APP_GEMINI_API_KEY;
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],

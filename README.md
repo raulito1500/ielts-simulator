@@ -1,70 +1,80 @@
-# Getting Started with Create React App
+# IELTS Simulator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> AI-powered IELTS practice platform with timed sessions, grading, error annotations, and PDF reports.
 
-## Available Scripts
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss&logoColor=white)
+![Gemini](https://img.shields.io/badge/Gemini_2.5_Flash-AI-4285F4?logo=google&logoColor=white)
+![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-deployed-222222?logo=github&logoColor=white)
 
-In the project directory, you can run:
+## Live Demo
 
-### `npm start`
+🔗 **[Try it live](https://raulito1500.github.io/ielts-simulator)**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Screenshots
+![IELTS Simulator - Writing Interface](docs/screenshots/writing-interface.png)
+<!-- Add screenshots here once captured:
+![IELTS Simulator - Feedback](docs/screenshots/feedback.png)
+-->
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Modules
 
-### `npm test`
+| Section | Status |
+|---------|--------|
+| Writing — Task 1 | ✅ Live |
+| Writing — Task 2 | 🚧 In development |
+| Listening — Full Test | 🚧 In development |
+| Reading — Passages 1, 2 & 3 | 🚧 In development |
+| Speaking — Parts 1, 2 & 3 | 🚧 In development |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Writing Task 1 — Features
 
-### `npm run build`
+- Random task generation (charts, graphs, tables) via **Google Imagen 3.0**
+- 20-minute timed writing session with countdown (red alert at &lt;5 min)
+- AI grading across 4 official IELTS criteria — **Gemini 2.5 Flash**
+- Handwritten-style error annotations in the corrected essay
+- Downloadable PDF report with scores, task image, and full corrections
+- Band score 0–9 display per criterion + overall score
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Tech Stack
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| Layer | Tech |
+|-------|------|
+| Framework | React 19 |
+| Styling | Tailwind CSS 3 |
+| AI Grading | Google Gemini 2.5 Flash |
+| Image Generation | Google Imagen 3.0 |
+| PDF Export | jsPDF + html2canvas |
+| Deployment | GitHub Pages |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Getting Started
 
-### `npm run eject`
+```bash
+git clone https://github.com/raulito1500/ielts-simulator.git
+cd ielts-simulator
+npm install
+cp .env.example .env   # then add your API key
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## API Keys
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+This app requires a **Google AI Studio** API key for both grading and task image generation.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Go to [Google AI Studio](https://aistudio.google.com/) and create an API key.
+2. Add it to your `.env` file:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
+REACT_APP_GEMINI_API_KEY=your_key_here
+```
 
-## Learn More
+## How It Works
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. Click **Generate Task** — a random IELTS Writing Task 1 prompt (chart, graph, or table) is created via AI
+2. Write your response in the timed sheet — you have **20 minutes**
+3. When time runs out, click **Grade** — receive band scores and inline corrections from Gemini
+4. Click **Download PDF** — get a full report with scores, task image, and annotated essay
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## License
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT
