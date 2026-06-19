@@ -907,12 +907,12 @@ Guidelines for this part:
   - Word Count: Strictly enforce word limits in answers. If instructions say "ONE WORD ONLY", the 'answer' field must contain only one word. If "NO MORE THAN TWO WORDS", the answer can be one or two words.
 `;
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     const payload = {
         contents: [{ parts: [{ text: "Generate the test part." }] }],
         systemInstruction: { parts: [{ text: systemPrompt }] },
     };
-    
+
     const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1019,7 +1019,7 @@ const gradeWritingTask2Api = async (text, essayQuestion, apiKey) => {
     For 'correctedHtml', use the user's original essay. For each error, wrap the incorrect word/phrase in a <del> tag and insert the correction inside a <span class='handwritten'> tag within the <del> tag. Example: 'This is a <del>good<span class='handwritten'>great</span></del> idea.' Ensure the entire output is a valid JSON object.`;
     
     const userQuery = `My essay for the question "${essayQuestion}" is:\n---\n${text}\n---`;
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     const payload = {
         contents: [{ parts: [{ text: userQuery }] }],
         systemInstruction: { parts: [{ text: systemPrompt }] },
@@ -1057,7 +1057,7 @@ const gradeWritingTask1Api = async (text, apiKey) => {
     
     const userQuery = `My essay is:\n---\n${text}\n---`;
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     const payload = {
         contents: [{ parts: [{ text: userQuery }] }],
         systemInstruction: { parts: [{ text: systemPrompt }] },
@@ -1088,19 +1088,23 @@ const generateGraphTaskApi = async (apiKey) => {
     ];
     const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
-    
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-preview-image-generation:generateContent?key=${apiKey}`;
+
     const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ instances: { prompt: randomPrompt }, parameters: { "sampleCount": 1 } })
+        body: JSON.stringify({
+            contents: [{ parts: [{ text: randomPrompt }] }],
+            generationConfig: { responseModalities: ["IMAGE", "TEXT"] }
+        })
     });
 
     if (!response.ok) throw new Error(`API error: ${response.statusText}`);
 
     const result = await response.json();
-    if (result.predictions && result.predictions[0]?.bytesBase64Encoded) {
-        return `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+    const imagePart = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+    if (imagePart?.inlineData) {
+        return `data:${imagePart.inlineData.mimeType};base64,${imagePart.inlineData.data}`;
     } else {
         throw new Error("Invalid response structure from image generation API.");
     }
