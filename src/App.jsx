@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ICONS, navigationStructure } from './constants/navigation';
+import formatTime from './utils/formatTime';
 
 // --- IMPORTANT: ADD YOUR API KEY HERE --- //
 // Get your free key from Google AI Studio: https://aistudio.google.com/app/apikey
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
-
-const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-    const secs = (seconds % 60).toString().padStart(2, '0');
-    return `${mins}:${secs}`;
-};
 
 const loadScript = (src) => {
     return new Promise((resolve, reject) => {
