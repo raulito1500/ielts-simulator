@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ICONS, navigationStructure } from './constants/navigation';
 import formatTime from './utils/formatTime';
 import loadScript from './utils/loadScript';
+import useIeltsTimer from './hooks/useIeltsTimer';
 
 // --- IMPORTANT: ADD YOUR API KEY HERE --- //
 // Get your free key from Google AI Studio: https://aistudio.google.com/app/apikey
@@ -119,49 +120,6 @@ const Sidebar = ({ activeView, setActiveView }) => {
         </nav>
     );
 };
-
-// --- TIMER HOOK --- //
-const useIeltsTimer = (initialTime, onTimeUp) => {
-    const [timeLeft, setTimeLeft] = useState(initialTime);
-    const [timerActive, setTimerActive] = useState(false);
-    const timerRef = useRef(null);
-
-    const startTimer = useCallback(() => {
-        if (!timerActive) {
-            setTimerActive(true);
-        }
-    }, [timerActive]);
-
-    const endTimer = useCallback(() => {
-        clearInterval(timerRef.current);
-        setTimerActive(false);
-        onTimeUp();
-    }, [onTimeUp]);
-
-    const resetTimer = useCallback(() => {
-        clearInterval(timerRef.current);
-        setTimerActive(false);
-        setTimeLeft(initialTime);
-    }, [initialTime]);
-    
-    useEffect(() => {
-        if (timerActive) {
-            timerRef.current = setInterval(() => {
-                setTimeLeft(prev => {
-                    if (prev <= 1) {
-                        endTimer();
-                        return 0;
-                    }
-                    return prev - 1;
-                });
-            }, 1000);
-        }
-        return () => clearInterval(timerRef.current);
-    }, [timerActive, endTimer]);
-
-    return { timeLeft, timerActive, startTimer, endTimer, resetTimer };
-};
-
 
 // --- FEATURE COMPONENTS --- //
 
