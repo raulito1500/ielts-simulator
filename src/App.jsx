@@ -1,23 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ICONS, navigationStructure } from './constants/navigation';
 import formatTime from './utils/formatTime';
+import loadScript from './utils/loadScript';
 
 // --- IMPORTANT: ADD YOUR API KEY HERE --- //
 // Get your free key from Google AI Studio: https://aistudio.google.com/app/apikey
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
-
-const loadScript = (src) => {
-    return new Promise((resolve, reject) => {
-        if (document.querySelector(`script[src="${src}"]`)) {
-            return resolve();
-        }
-        const script = document.createElement('script');
-        script.src = src;
-        script.onload = () => resolve();
-        script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-        document.head.appendChild(script);
-    });
-};
 
 // --- MODAL & GENERIC COMPONENTS --- //
 const ImageModal = ({ imageUrl, onClose }) => {
