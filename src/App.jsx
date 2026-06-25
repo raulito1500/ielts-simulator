@@ -5,74 +5,14 @@ import loadScript from './utils/loadScript';
 import useIeltsTimer from './hooks/useIeltsTimer';
 import { gradeWritingTask1Api, gradeWritingTask2Api, generateGraphTaskApi } from './api/gemini';
 import { generateListeningTestPartApi, generateListeningAudioApi } from './api/listening';
+import ImageModal from './components/modals/ImageModal';
+import FeedbackModal from './components/modals/FeedbackModal';
+import ConfirmationModal from './components/modals/ConfirmationModal';
 
 // --- IMPORTANT: ADD YOUR API KEY HERE --- //
 // Get your free key from Google AI Studio: https://aistudio.google.com/app/apikey
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 
-// --- MODAL & GENERIC COMPONENTS --- //
-const ImageModal = ({ imageUrl, onClose }) => {
-    if (!imageUrl) return null;
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4" onClick={onClose}>
-            <div className="max-w-4xl max-h-full" onClick={(e) => e.stopPropagation()}>
-                <img src={imageUrl} alt="Generated Task Graph" className="max-w-full max-h-[90vh] rounded-lg shadow-2xl" />
-                <button onClick={onClose} className="absolute top-4 right-4 text-white text-3xl font-bold">&times;</button>
-            </div>
-        </div>
-    );
-};
-
-const FeedbackModal = ({ score, onClose, overallScore }) => {
-    const [openAccordion, setOpenAccordion] = useState(null);
-    const toggleAccordion = (index) => setOpenAccordion(openAccordion === index ? null : index);
-    if (!score) return null;
-    const criteria = Object.keys(score);
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50" onClick={onClose}>
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl font-inter p-8 m-4" onClick={(e) => e.stopPropagation()}>
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold text-gray-800">Your Detailed Feedback</h2>
-                    <button onClick={onClose} className="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
-                </div>
-                <div className="text-center bg-blue-50 p-4 rounded-lg mb-6">
-                    <p className="text-lg text-blue-800">Overall Estimated Band Score</p>
-                    <p className="text-5xl font-bold text-blue-600">{overallScore}</p>
-                </div>
-                <div className="space-y-3">
-                    {criteria.map((criterion, index) => (
-                        <div key={criterion} className="border border-gray-200 rounded-lg overflow-hidden">
-                            <button onClick={() => toggleAccordion(index)} className="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none">
-                                <span className="font-semibold text-gray-700">{criterion.replace(/([A-Z])/g, ' $1').trim()}</span>
-                                <div className='flex items-center gap-4'>
-                                    <span className='font-bold text-lg text-blue-600'>{score[criterion].score.toFixed(1)}</span>
-                                    <ICONS.CHEVRON className={`w-6 h-6 text-gray-500 transition-transform duration-300 ${openAccordion === index ? 'rotate-180' : ''}`} />
-                                </div>
-                            </button>
-                            {openAccordion === index && (
-                                <div className="p-4 bg-white border-t border-gray-200">
-                                    <p className="text-gray-600 whitespace-pre-line">{score[criterion].observation}</p>
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const ConfirmationModal = ({ onConfirm, onCancel, message }) => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded-lg shadow-xl font-inter">
-            <p className="text-lg mb-4">{message}</p>
-            <div className="flex justify-end gap-4">
-                <button onClick={onCancel} className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">Cancel</button>
-                <button onClick={onConfirm} className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Confirm</button>
-            </div>
-        </div>
-    </div>
-);
 
 const PlaceholderPage = ({ title }) => (
     <div className="w-full h-full flex items-center justify-center bg-white rounded-xl border border-slate-200 shadow-sm">
