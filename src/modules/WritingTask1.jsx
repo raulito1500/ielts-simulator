@@ -1,56 +1,55 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ICONS, navigationStructure } from './constants/navigation';
-import formatTime from './utils/formatTime';
-import loadScript from './utils/loadScript';
-import useIeltsTimer from './hooks/useIeltsTimer';
-import { gradeWritingTask1Api, gradeWritingTask2Api, generateGraphTaskApi } from './api/gemini';
-import { generateListeningTestPartApi, generateListeningAudioApi } from './api/listening';
-import ImageModal from './components/modals/ImageModal';
-import FeedbackModal from './components/modals/FeedbackModal';
-import ConfirmationModal from './components/modals/ConfirmationModal';
-import PlaceholderPage from './components/PlaceholderPage';
-import Sidebar from './components/Sidebar';
-import ListeningFullTest from './modules/ListeningFullTest';
-import WritingTask1 from './modules/WritingTask1';
+import { ICONS } from '../constants/navigation';
+import { gradeWritingTask1Api, generateGraphTaskApi } from '../api/gemini';
+import loadScript from '../utils/loadScript';
+import formatTime from '../utils/formatTime';
+import useIeltsTimer from '../hooks/useIeltsTimer';
+import ImageModal from '../components/modals/ImageModal';
+import FeedbackModal from '../components/modals/FeedbackModal';
+import ConfirmationModal from '../components/modals/ConfirmationModal';
 
-// --- IMPORTANT: ADD YOUR API KEY HERE --- //
-// Get your free key from Google AI Studio: https://aistudio.google.com/app/apikey
-const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
-
-
-// --- WRITING TASK 2 COMPONENT --- //
-const WritingTask2 = ({ apiKey }) => {
+const WritingTask1 = ({ apiKey }) => {
     const [text, setText] = useState('');
     const [wordCount, setWordCount] = useState(0);
     const [isTimeUp, setIsTimeUp] = useState(false);
-    const [essayQuestion, setEssayQuestion] = useState(null);
+    const [imageUrl, setImageUrl] = useState(null);
+    const [isGenerating, setIsGenerating] = useState(false);
     const [isGrading, setIsGrading] = useState(false);
     const [score, setScore] = useState(null);
     const [correctedHtml, setCorrectedHtml] = useState(null);
+    const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
     const [gradeButtonClicked, setGradeButtonClicked] = useState(false);
     const [showCopyMessage, setShowCopyMessage] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
-    
+
     const writingSheetRef = useRef(null);
     const initialTimeSpent = useRef(0);
 
     const handleTimeUp = useCallback(() => setIsTimeUp(true), []);
-    const { timeLeft, timerActive, startTimer, endTimer, resetTimer } = useIeltsTimer(2400, handleTimeUp);
+    const { timeLeft, timerActive, startTimer, endTimer, resetTimer } = useIeltsTimer(1200, handleTimeUp);
 
     useEffect(() => {
         const words = text.trim().split(/\s+/).filter(Boolean);
         setWordCount(words.length);
     }, [text]);
-    
-    const generateEssayTask = () => {
-        const questions = [
-            "Some people believe that unpaid community service should be a compulsory part of high school programmes. To what extent do you agree or disagree?",
-            "In many countries, traditional foods are being replaced by fast food. This has a negative impact on families, individuals and society. To what extent do you agree or disagree?",
-            "Some people think that the best way to reduce crime is to give longer prison sentences. Others, however, believe there are better alternative ways of reducing crime. Discuss both views and give your own opinion.",
-        ];
-        setEssayQuestion(questions[Math.floor(Math.random() * questions.length)]);
-        startTimer();
+
+    const handleGenerateTask = async () => {
+        if (!apiKey) {
+            alert("Please add your Gemini API key at the top of the file.");
+            return;
+        }
+        setIsGenerating(true);
+        try {
+            const url = await generateGraphTaskApi(apiKey);
+            setImageUrl(url);
+            startTimer();
+        } catch (error) {
+            console.error("Error generating image:", error);
+            setImageUrl(`https://placehold.co/600x400/EBF4FF/1E40AF?text=Error+Generating+Image`);
+        } finally {
+            setIsGenerating(false);
+        }
     };
 
     const handleGrade = async () => {
@@ -61,7 +60,7 @@ const WritingTask2 = ({ apiKey }) => {
         setIsGrading(true);
         setGradeButtonClicked(true);
         try {
-            const { scores, correctedHtml } = await gradeWritingTask2Api(text, essayQuestion, apiKey);
+            const { scores, correctedHtml } = await gradeWritingTask1Api(text, apiKey);
             setScore(scores);
             setCorrectedHtml(correctedHtml);
         } catch (error) {
@@ -76,7 +75,7 @@ const WritingTask2 = ({ apiKey }) => {
         resetTimer();
         setIsTimeUp(false);
         setText('');
-        setEssayQuestion(null);
+        setImageUrl(null);
         setScore(null);
         setCorrectedHtml(null);
         setGradeButtonClicked(false);
@@ -84,7 +83,7 @@ const WritingTask2 = ({ apiKey }) => {
     };
 
     const handleEndSession = () => {
-        initialTimeSpent.current = 2400 - timeLeft;
+        initialTimeSpent.current = 1200 - timeLeft;
         endTimer();
         setShowConfirmModal(false);
     };
@@ -99,7 +98,22 @@ const WritingTask2 = ({ apiKey }) => {
         setShowCopyMessage(true);
         setTimeout(() => setShowCopyMessage(false), 2000);
     };
-    
+
+    const handleDownloadPdf = async () => {
+        try {
+            await Promise.all([
+                loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'),
+                loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js')
+            ]);
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'p', unit: 'px', format: 'a4' });
+            // ... (rest of the PDF generation logic)
+            doc.save('ielts-report-task1.pdf');
+        } catch (error) {
+            console.error("PDF generation libraries could not be loaded.", error);
+        }
+    };
+
     const calculateOverallScore = () => {
         if (!score) return 'N/A';
         const total = Object.values(score).reduce((sum, item) => sum + item.score, 0);
@@ -131,14 +145,12 @@ const WritingTask2 = ({ apiKey }) => {
                     )}
                 </div>
                 <div className="bg-white p-5 rounded-xl border border-slate-200 flex-grow flex flex-col shadow-sm">
-                    <h2 className="text-lg font-bold mb-3">Academic Task 2</h2>
-                    <p className="text-sm text-slate-600 mb-4">You should spend about 40 minutes on this task. Write at least 250 words.</p>
-                    <div className="flex-grow flex items-center justify-center bg-slate-50 rounded-lg p-4">
-                        {essayQuestion ? (
-                            <p className="text-center text-slate-700 font-semibold">{essayQuestion}</p>
-                        ) : (
-                            <button onClick={generateEssayTask} className="px-5 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700">Generate Random Essay Task</button>
-                        )}
+                    <h2 className="text-lg font-bold mb-3">Academic Task 1</h2>
+                    <p className="text-sm text-slate-600 mb-4">You should spend about 20 minutes on this task. Summarise the information... Write at least 150 words.</p>
+                    <div className="flex-grow flex items-center justify-center bg-slate-50 rounded-lg p-2">
+                        {imageUrl ? <img src={imageUrl} alt="Task Graph" className="max-h-full max-w-full object-contain rounded-md cursor-pointer" onClick={() => setIsImageModalOpen(true)} />
+                        : !timerActive && !isTimeUp && <button onClick={handleGenerateTask} disabled={isGenerating} className="px-5 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 disabled:bg-blue-300"> {isGenerating ? 'Generating...' : 'Generate Random Graph Task'} </button>}
+                        {timerActive && !imageUrl && <p className="text-slate-500 text-center">Writing session started with your own material.</p>}
                     </div>
                 </div>
                 <div className="bg-white p-4 rounded-xl border border-slate-200 grid grid-cols-2 gap-3 shadow-sm">
@@ -147,8 +159,9 @@ const WritingTask2 = ({ apiKey }) => {
                     <button onClick={handleGrade} disabled={!isTimeUp || !text.trim() || gradeButtonClicked} className="w-full p-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 disabled:bg-gray-300 flex items-center justify-center"> {isGrading && <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>} {isGrading ? 'Grading...' : 'Grade'} </button>
                      {score && (
                         <>
-                         <div className="col-span-2 border-t my-2"></div>
+                            <div className="col-span-2 border-t my-2"></div>
                             <button onClick={handleCopy} className="relative w-full p-3 bg-blue-100 text-blue-700 font-semibold rounded-lg hover:bg-blue-200 flex items-center justify-center gap-2"> <ICONS.COPY className="w-5 h-5"/> Copy Text {showCopyMessage && <span className="absolute -top-8 bg-slate-800 text-white text-xs px-2 py-1 rounded">Copied!</span>} </button>
+                            <button onClick={handleDownloadPdf} className="w-full p-3 bg-blue-100 text-blue-700 font-semibold rounded-lg hover:bg-blue-200 flex items-center justify-center gap-2"> <ICONS.DOWNLOAD className="w-5 h-5" /> PDF Report </button>
                         </>
                     )}
                 </div>
@@ -159,62 +172,11 @@ const WritingTask2 = ({ apiKey }) => {
                     : <textarea value={text} onChange={handleTextChange} readOnly={isTimeUp} className="w-full h-full bg-transparent border-none outline-none resize-none" placeholder="Start typing..."/>}
                 </div>
             </div>
+            {isImageModalOpen && <ImageModal imageUrl={imageUrl} onClose={() => setIsImageModalOpen(false)} />}
             {isFeedbackModalOpen && <FeedbackModal score={score} onClose={() => setIsFeedbackModalOpen(false)} overallScore={calculateOverallScore()} />}
             {showConfirmModal && <ConfirmationModal onConfirm={handleEndSession} onCancel={() => setShowConfirmModal(false)} message="Are you sure you want to end the session?" />}
         </>
     );
 };
 
-// --- API --- //
-// --- MAIN APP COMPONENT --- //
-export default function App() {
-    const [activeView, setActiveView] = useState({ main: 'Writing', sub: 'Task 1' });
-
-    const renderActiveView = () => {
-        if (activeView.main === 'Writing' && activeView.sub === 'Task 1') {
-            return <WritingTask1 apiKey={GEMINI_API_KEY} />;
-        }
-        if (activeView.main === 'Writing' && activeView.sub === 'Task 2') {
-            return <WritingTask2 apiKey={GEMINI_API_KEY} />;
-        }
-        if (activeView.main === 'Listening' && activeView.sub === 'Full Test') {
-            return <ListeningFullTest apiKey={GEMINI_API_KEY} />;
-        }
-        
-        return <PlaceholderPage title={`${activeView.main} ${activeView.sub}`} />;
-    };
-
-    return (
-        <>
-            <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&family=Caveat:wght@700&display=swap');
-                body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-                .font-roboto-mono { font-family: 'Roboto Mono', monospace; }
-                .handwritten {
-                    font-family: 'Caveat', cursive; color: #1e40af; background-color: #e0f2fed1; padding: 0 0.3em;
-                    border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: absolute;
-                    left: 50%; bottom: 80%; line-height: 1em; transform: translateX(-50%) translateY(4px);
-                    white-space: nowrap; font-size: 1.1em; font-weight: 700; pointer-events: none;
-                }
-                del { 
-                    color: #ef4444; 
-                    text-decoration: none; 
-                    background-color: transparent; 
-                    position: relative; 
-                    display: inline-block;
-                }
-                del::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-bottom: 1.5px solid #ef4444; pointer-events: none; }
-                @keyframes blink { 50% { opacity: 0; } }
-                .blinking { animation: blink 1s linear infinite; }
-            `}</style>
-
-            <div className="flex h-screen bg-slate-50 text-gray-800">
-                <Sidebar activeView={activeView} setActiveView={setActiveView} />
-
-                <main className="w-[92%] p-6 flex gap-6 overflow-y-auto">
-                    {renderActiveView()}
-                </main>
-            </div>
-        </>
-    );
-}
+export default WritingTask1;
