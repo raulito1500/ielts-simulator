@@ -7,6 +7,7 @@ import useIeltsTimer from '../hooks/useIeltsTimer';
 import ImageModal from '../components/modals/ImageModal';
 import FeedbackModal from '../components/modals/FeedbackModal';
 import ConfirmationModal from '../components/modals/ConfirmationModal';
+import ErrorModal from '../components/modals/ErrorModal';
 
 const WritingTask1 = ({ apiKey }) => {
     const [text, setText] = useState('');
@@ -22,6 +23,7 @@ const WritingTask1 = ({ apiKey }) => {
     const [gradeButtonClicked, setGradeButtonClicked] = useState(false);
     const [showCopyMessage, setShowCopyMessage] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     const writingSheetRef = useRef(null);
     const initialTimeSpent = useRef(0);
@@ -36,7 +38,7 @@ const WritingTask1 = ({ apiKey }) => {
 
     const handleGenerateTask = async () => {
         if (!apiKey) {
-            alert("Please add your Gemini API key at the top of the file.");
+            setErrorMessage("Please add your Gemini API key at the top of the file.");
             return;
         }
         setIsGenerating(true);
@@ -54,7 +56,7 @@ const WritingTask1 = ({ apiKey }) => {
 
     const handleGrade = async () => {
         if (!apiKey) {
-            alert("Please add your Gemini API key at the top of the file.");
+            setErrorMessage("Please add your Gemini API key at the top of the file.");
             return;
         }
         setIsGrading(true);
@@ -175,6 +177,7 @@ const WritingTask1 = ({ apiKey }) => {
             {isImageModalOpen && <ImageModal imageUrl={imageUrl} onClose={() => setIsImageModalOpen(false)} />}
             {isFeedbackModalOpen && <FeedbackModal score={score} onClose={() => setIsFeedbackModalOpen(false)} overallScore={calculateOverallScore()} />}
             {showConfirmModal && <ConfirmationModal onConfirm={handleEndSession} onCancel={() => setShowConfirmModal(false)} message="Are you sure you want to end the session?" />}
+            {errorMessage && <ErrorModal message={errorMessage} onClose={() => setErrorMessage(null)} />}
         </>
     );
 };

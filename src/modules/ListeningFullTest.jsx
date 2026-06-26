@@ -3,6 +3,7 @@ import { ICONS } from '../constants/navigation';
 import { generateListeningTestPartApi, generateListeningAudioApi } from '../api/listening';
 import loadScript from '../utils/loadScript';
 import formatTime from '../utils/formatTime';
+import ErrorModal from '../components/modals/ErrorModal';
 
 const ListeningFullTest = ({ apiKey }) => {
     const [phase, setPhase] = useState('not_started'); // not_started, generating, prereading, listening, reviewing, finished
@@ -11,6 +12,7 @@ const ListeningFullTest = ({ apiKey }) => {
     const [userAnswers, setUserAnswers] = useState({});
     const [score, setScore] = useState(null);
     const [testData, setTestData] = useState({});
+    const [errorMessage, setErrorMessage] = useState(null);
 
     const [reviewTimeLeft, setReviewTimeLeft] = useState(60);
     const reviewTimerRef = useRef(null);
@@ -31,7 +33,7 @@ const ListeningFullTest = ({ apiKey }) => {
 
     const handleGenerateNextPart = useCallback(async (part) => {
         if (!apiKey) {
-            alert("Please add your Gemini API key at the top of the file to generate the test.");
+            setErrorMessage("Please add your Gemini API key at the top of the file to generate the test.");
             setPhase('not_started');
             return;
         }
@@ -347,6 +349,7 @@ const ListeningFullTest = ({ apiKey }) => {
                     </div>
                 )}
             </div>
+            {errorMessage && <ErrorModal message={errorMessage} onClose={() => setErrorMessage(null)} />}
             <div className="w-[62%] flex-grow flex flex-col bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto">
                 {(phase !== 'finished' && phase !== 'not_started') && testData[`part${currentPart}`] && <div className="p-6">{renderQuestions(currentPart)}</div>}
                 {phase === 'finished' && score !== null && renderResults()}
