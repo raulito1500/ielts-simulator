@@ -107,13 +107,153 @@ const WritingTask1 = ({ apiKey }) => {
                 loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'),
                 loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js')
             ]);
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ orientation: 'p', unit: 'px', format: 'a4' });
-            // ... (rest of the PDF generation logic)
-            doc.save('ielts-report-task1.pdf');
         } catch (error) {
             console.error("PDF generation libraries could not be loaded.", error);
+            setErrorMessage("Sorry, the PDF report could not be generated. Please check your connection and try again.");
+            return;
         }
+
+        const { jsPDF } = window.jspdf;
+        const html2canvas = window.html2canvas;
+
+        const doc = new jsPDF({
+            orientation: 'p',
+            unit: 'px',
+            format: 'a4'
+        });
+
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const margin = 20;
+        let yPos = 20;
+
+        try {
+            doc.setFont('Inter', 'bold');
+        } catch (e) {
+            doc.setFont('helvetica', 'bold');
+        }
+
+        doc.setFontSize(20);
+        doc.text('IELTS Writing Task 1 Report', pageWidth / 2, yPos, { align: 'center' });
+        yPos += 30;
+
+        try {
+            doc.setFont('Inter', 'normal');
+        } catch (e) {
+            doc.setFont('helvetica', 'normal');
+        }
+
+        doc.setFontSize(12);
+
+        const overallScore = calculateOverallScore();
+        doc.text(`Overall Score: ${overallScore}`, margin, yPos);
+        yPos += 15;
+        doc.text(`Time Spent: ${formatTime(initialTimeSpent.current)}`, margin, yPos);
+        yPos += 15;
+        doc.text(`Word Count: ${wordCount}`, margin, yPos);
+        yPos += 30;
+
+        if (score) {
+            doc.setFontSize(14);
+            try {
+                doc.setFont('Inter', 'bold');
+            } catch (e) {
+                doc.setFont('helvetica', 'bold');
+            }
+            doc.text('Detailed Scores & Feedback:', margin, yPos);
+            yPos += 20;
+
+            const availableWidth = pageWidth - (margin * 2) - 15;
+
+            Object.entries(score).forEach(([key, value]) => {
+                doc.setFontSize(11);
+                try {
+                    doc.setFont('Inter', 'bold');
+                } catch (e) {
+                    doc.setFont('helvetica', 'bold');
+                }
+                const scoreText = `${key.replace(/([A-Z])/g, ' $1').trim()}: ${value.score.toFixed(1)}`;
+
+                try {
+                    doc.setFont('Inter', 'normal');
+                } catch (e) {
+                    doc.setFont('helvetica', 'normal');
+                }
+                const observationLines = doc.splitTextToSize(value.observation, availableWidth);
+                const blockHeight = 15 + (observationLines.length * 12) + 10;
+
+                if (yPos + blockHeight > pageHeight - margin) {
+                    doc.addPage();
+                    yPos = margin;
+                }
+
+                try {
+                    doc.setFont('Inter', 'bold');
+                } catch (e) {
+                    doc.setFont('helvetica', 'bold');
+                }
+                doc.text(scoreText, margin + 5, yPos);
+                yPos += 15;
+
+                try {
+                    doc.setFont('Inter', 'normal');
+                } catch (e) {
+                    doc.setFont('helvetica', 'normal');
+                }
+                doc.text(observationLines, margin + 10, yPos);
+                yPos += (observationLines.length * 12) + 10;
+            });
+            yPos += 15;
+        }
+
+        if (imageUrl) {
+            try {
+                const img = new Image();
+                img.crossOrigin = 'Anonymous';
+                img.src = imageUrl;
+                await new Promise((resolve, reject) => {
+                    img.onload = resolve;
+                    img.onerror = reject;
+                });
+
+                const aspectRatio = img.height / img.width;
+                const imgHeight = (pageWidth - (margin * 2)) * aspectRatio;
+
+                if (yPos + imgHeight > pageHeight - margin) {
+                    doc.addPage();
+                    yPos = margin;
+                }
+                doc.addImage(img, 'PNG', margin, yPos, pageWidth - (margin * 2), 0);
+                yPos += imgHeight + 20;
+            } catch (e) {
+                console.error("Could not add task image to PDF:", e);
+                doc.text('Task image could not be loaded for PDF.', margin, yPos);
+                yPos += 20;
+            }
+        }
+
+        if (writingSheetRef.current) {
+            try {
+                const canvas = await html2canvas(writingSheetRef.current, { scale: 2, useCORS: true });
+                const imgData = canvas.toDataURL('image/png');
+
+                const imgProps = doc.getImageProperties(imgData);
+                const pdfWidth = pageWidth - (margin * 2);
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+                if (yPos + pdfHeight > pageHeight - margin) {
+                    doc.addPage();
+                    yPos = margin;
+                }
+
+                doc.addImage(imgData, 'PNG', margin, yPos, pdfWidth, pdfHeight);
+            } catch (e) {
+                console.error("Error capturing writing sheet for PDF:", e);
+                doc.text('Could not capture writing sheet.', margin, yPos);
+            }
+        }
+
+        doc.save('ielts-report-task1.pdf');
     };
 
     const calculateOverallScore = () => {
