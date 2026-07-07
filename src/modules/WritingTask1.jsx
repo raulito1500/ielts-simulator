@@ -48,7 +48,7 @@ const WritingTask1 = ({ apiKey }) => {
             startTimer();
         } catch (error) {
             console.error("Error generating image:", error);
-            setImageUrl(`https://placehold.co/600x400/EBF4FF/1E40AF?text=Error+Generating+Image`);
+            setImageUrl(`https://placehold.co/600x400/CCFBF1/115E59?text=Error+Generating+Image`);
         } finally {
             setIsGenerating(false);
         }
@@ -270,7 +270,7 @@ const WritingTask1 = ({ apiKey }) => {
                     {score ? (
                         <div className="w-full cursor-pointer" onClick={() => setIsFeedbackModalOpen(true)}>
                             <p className="text-sm text-slate-500">Overall Estimated Band Score</p>
-                            <p className="text-4xl font-bold text-blue-600">{calculateOverallScore()}</p>
+                            <p className="text-4xl font-bold text-primary-600">{calculateOverallScore()}</p>
                         </div>
                     ) : (
                         <>
@@ -291,7 +291,7 @@ const WritingTask1 = ({ apiKey }) => {
                     <p className="text-sm text-slate-600 mb-4">You should spend about 20 minutes on this task. Summarise the information... Write at least 150 words.</p>
                     <div className="flex-grow flex items-center justify-center bg-slate-50 rounded-lg p-2">
                         {imageUrl ? <img src={imageUrl} alt="Task Graph" className="max-h-full max-w-full object-contain rounded-md cursor-pointer" onClick={() => setIsImageModalOpen(true)} />
-                        : !timerActive && !isTimeUp && <button onClick={handleGenerateTask} disabled={isGenerating} className="px-5 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 disabled:bg-blue-300"> {isGenerating ? 'Generating...' : 'Generate Random Graph Task'} </button>}
+                        : !timerActive && !isTimeUp && <button onClick={handleGenerateTask} disabled={isGenerating} className="px-5 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 disabled:bg-primary-300"> {isGenerating ? 'Generating...' : 'Generate Random Graph Task'} </button>}
                         {timerActive && !imageUrl && <p className="text-slate-500 text-center">Writing session started with your own material.</p>}
                     </div>
                 </div>
@@ -302,8 +302,8 @@ const WritingTask1 = ({ apiKey }) => {
                      {score && (
                         <>
                             <div className="col-span-2 border-t my-2"></div>
-                            <button onClick={handleCopy} className="relative w-full p-3 bg-blue-100 text-blue-700 font-semibold rounded-lg hover:bg-blue-200 flex items-center justify-center gap-2"> <ICONS.COPY className="w-5 h-5"/> Copy Text {showCopyMessage && <span className="absolute -top-8 bg-slate-800 text-white text-xs px-2 py-1 rounded">Copied!</span>} </button>
-                            <button onClick={handleDownloadPdf} className="w-full p-3 bg-blue-100 text-blue-700 font-semibold rounded-lg hover:bg-blue-200 flex items-center justify-center gap-2"> <ICONS.DOWNLOAD className="w-5 h-5" /> PDF Report </button>
+                            <button onClick={handleCopy} className="relative w-full p-3 bg-primary-100 text-primary-700 font-semibold rounded-lg hover:bg-primary-200 flex items-center justify-center gap-2"> <ICONS.COPY className="w-5 h-5"/> Copy Text {showCopyMessage && <span className="absolute -top-8 bg-slate-800 text-white text-xs px-2 py-1 rounded">Copied!</span>} </button>
+                            <button onClick={handleDownloadPdf} className="w-full p-3 bg-primary-100 text-primary-700 font-semibold rounded-lg hover:bg-primary-200 flex items-center justify-center gap-2"> <ICONS.DOWNLOAD className="w-5 h-5" /> PDF Report </button>
                         </>
                     )}
                 </div>
