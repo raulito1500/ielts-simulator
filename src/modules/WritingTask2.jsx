@@ -103,12 +103,12 @@ const WritingTask2 = ({ apiKey }) => {
                     {score ? (
                         <div className="w-full cursor-pointer" onClick={() => setIsFeedbackModalOpen(true)}>
                             <p className="text-sm text-slate-500">Overall Estimated Band Score</p>
-                            <p className="text-4xl font-bold text-blue-600">{calculateOverallScore()}</p>
+                            <p className="text-4xl font-bold text-primary-600">{calculateOverallScore()}</p>
                         </div>
                     ) : (
                         <>
                             <div>
-                                <p className="text-sm text-slate-500">Time Remaining</p>
+                                <p className="text-sm text-slate-500">Time Left</p>
                                 <p className={`font-roboto-mono text-3xl font-bold ${timeLeft <= 300 ? 'text-red-500 blinking' : 'text-slate-700'}`}>{formatTime(timeLeft)}</p>
                             </div>
                             <div className="border-l h-10 border-slate-200"></div>
@@ -126,7 +126,7 @@ const WritingTask2 = ({ apiKey }) => {
                         {essayQuestion ? (
                             <p className="text-center text-slate-700 font-semibold">{essayQuestion}</p>
                         ) : (
-                            <button onClick={generateEssayTask} className="px-5 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700">Generate Random Essay Task</button>
+                            <button onClick={generateEssayTask} className="px-5 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700">Generate Random Essay Task</button>
                         )}
                     </div>
                 </div>
@@ -137,7 +137,7 @@ const WritingTask2 = ({ apiKey }) => {
                      {score && (
                         <>
                          <div className="col-span-2 border-t my-2"></div>
-                            <button onClick={handleCopy} className="relative w-full p-3 bg-blue-100 text-blue-700 font-semibold rounded-lg hover:bg-blue-200 flex items-center justify-center gap-2"> <ICONS.COPY className="w-5 h-5"/> Copy Text {showCopyMessage && <span className="absolute -top-8 bg-slate-800 text-white text-xs px-2 py-1 rounded">Copied!</span>} </button>
+                            <button onClick={handleCopy} className="relative w-full p-3 bg-primary-100 text-primary-700 font-semibold rounded-lg hover:bg-primary-200 flex items-center justify-center gap-2"> <ICONS.COPY className="w-5 h-5"/> Copy Text {showCopyMessage && <span className="absolute -top-8 bg-slate-800 text-white text-xs px-2 py-1 rounded">Copied!</span>} </button>
                         </>
                     )}
                 </div>

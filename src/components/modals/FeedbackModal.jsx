@@ -13,9 +13,9 @@ const FeedbackModal = ({ score, onClose, overallScore }) => {
                     <h2 className="text-2xl font-bold text-gray-800">Your Detailed Feedback</h2>
                     <button onClick={onClose} className="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
                 </div>
-                <div className="text-center bg-blue-50 p-4 rounded-lg mb-6">
-                    <p className="text-lg text-blue-800">Overall Estimated Band Score</p>
-                    <p className="text-5xl font-bold text-blue-600">{overallScore}</p>
+                <div className="text-center bg-primary-50 p-4 rounded-lg mb-6">
+                    <p className="text-lg text-primary-800">Overall Estimated Band Score</p>
+                    <p className="text-5xl font-bold text-primary-600">{overallScore}</p>
                 </div>
                 <div className="space-y-3">
                     {criteria.map((criterion, index) => (
@@ -23,7 +23,7 @@ const FeedbackModal = ({ score, onClose, overallScore }) => {
                             <button onClick={() => toggleAccordion(index)} className="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none">
                                 <span className="font-semibold text-gray-700">{criterion.replace(/([A-Z])/g, ' $1').trim()}</span>
                                 <div className='flex items-center gap-4'>
-                                    <span className='font-bold text-lg text-blue-600'>{score[criterion].score.toFixed(1)}</span>
+                                    <span className='font-bold text-lg text-primary-600'>{score[criterion].score.toFixed(1)}</span>
                                     <ICONS.CHEVRON className={`w-6 h-6 text-gray-500 transition-transform duration-300 ${openAccordion === index ? 'rotate-180' : ''}`} />
                                 </div>
                             </button>

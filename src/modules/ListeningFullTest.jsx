@@ -240,7 +240,7 @@ const ListeningFullTest = ({ apiKey }) => {
                                 <div key={questionKey} className="flex items-center gap-x-3 flex-wrap">
                                     <span className="font-bold">{q.q}.</span>
                                     <label className="font-semibold text-gray-800">{q.label.split('____')[0]}</label>
-                                    <input type="text" disabled={phase === 'finished'} className="flex-grow border-b-2 border-slate-300 focus:border-blue-500 outline-none p-1 min-w-[100px]" onChange={(e) => handleAnswerChange(q.q, e.target.value)} />
+                                    <input type="text" disabled={phase === 'finished'} className="flex-grow border-b-2 border-slate-300 focus:border-primary-500 outline-none p-1 min-w-[100px]" onChange={(e) => handleAnswerChange(q.q, e.target.value)} />
                                      {q.label.split('____')[1] && <label className="font-semibold text-gray-800">{q.label.split('____')[1]}</label>}
                                 </div>
                             );
@@ -273,10 +273,10 @@ const ListeningFullTest = ({ apiKey }) => {
         return (
              <div className="p-6">
                 <h2 className="text-2xl font-bold mb-4">Test Results</h2>
-                <div className="text-center bg-blue-50 p-6 rounded-lg mb-6">
-                    <p className="text-lg text-blue-800">Your Score</p>
-                    <p className="text-6xl font-bold text-blue-600">{score} / 40</p>
-                    <p className="text-2xl font-semibold text-blue-700 mt-2">Estimated Band: {band}</p>
+                <div className="text-center bg-primary-50 p-6 rounded-lg mb-6">
+                    <p className="text-lg text-primary-800">Your Score</p>
+                    <p className="text-6xl font-bold text-primary-600">{score} / 40</p>
+                    <p className="text-2xl font-semibold text-primary-700 mt-2">Estimated Band: {band}</p>
                 </div>
                 <div className="space-y-4">
                  {Object.values(testData).map((part, index) => (
@@ -331,10 +331,10 @@ const ListeningFullTest = ({ apiKey }) => {
                          </div>
                      )}
                 </div>
-                {phase === 'not_started' && <button onClick={startTest} className="w-full p-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700">Start Test</button>}
+                {phase === 'not_started' && <button onClick={startTest} className="w-full p-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700">Start Test</button>}
 
                 {phase === 'reviewing' && (
-                    <button onClick={handleNextPart} className="w-full p-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700">
+                    <button onClick={handleNextPart} className="w-full p-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700">
                         Continue to Part {currentPart + 1}
                     </button>
                 )}
@@ -342,7 +342,7 @@ const ListeningFullTest = ({ apiKey }) => {
                 {phase === 'finished' && !score && <button onClick={calculateScore} className="w-full p-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700">Submit & See Score</button>}
                 {score !== null && (
                     <div className="grid grid-cols-2 gap-3">
-                        <button onClick={handleDownloadListeningPdf} className="w-full p-3 bg-blue-100 text-blue-700 font-semibold rounded-lg hover:bg-blue-200 flex items-center justify-center gap-2">
+                        <button onClick={handleDownloadListeningPdf} className="w-full p-3 bg-primary-100 text-primary-700 font-semibold rounded-lg hover:bg-primary-200 flex items-center justify-center gap-2">
                             <ICONS.DOWNLOAD className="w-5 h-5" /> PDF Report
                         </button>
                         <button onClick={startTest} className="w-full p-3 bg-slate-100 text-slate-700 font-semibold rounded-lg hover:bg-slate-200">Restart Test</button>
