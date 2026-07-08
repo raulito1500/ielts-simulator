@@ -275,7 +275,7 @@ const WritingTask1 = ({ apiKey }) => {
                     ) : (
                         <>
                             <div>
-                                <p className="text-sm text-slate-500">Time Remaining</p>
+                                <p className="text-sm text-slate-500">Time Left</p>
                                 <p className={`font-roboto-mono text-3xl font-bold ${timeLeft <= 300 ? 'text-red-500 blinking' : 'text-slate-700'}`}>{formatTime(timeLeft)}</p>
                             </div>
                             <div className="border-l h-10 border-slate-200"></div>
@@ -288,7 +288,7 @@ const WritingTask1 = ({ apiKey }) => {
                 </div>
                 <div className="bg-white p-5 rounded-xl border border-slate-200 flex-grow flex flex-col shadow-sm">
                     <h2 className="text-lg font-bold mb-3">Academic Task 1</h2>
-                    <p className="text-sm text-slate-600 mb-4">You should spend about 20 minutes on this task. Summarise the information... Write at least 150 words.</p>
+                    <p className="text-sm text-slate-600 mb-4">You should spend about 20 minutes on this task. Summarise the information by selecting and reporting the main features. Write at least 150 words.</p>
                     <div className="flex-grow flex items-center justify-center bg-slate-50 rounded-lg p-2">
                         {imageUrl ? <img src={imageUrl} alt="Task Graph" className="max-h-full max-w-full object-contain rounded-md cursor-pointer" onClick={() => setIsImageModalOpen(true)} />
                         : !timerActive && !isTimeUp && <button onClick={handleGenerateTask} disabled={isGenerating} className="px-5 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 disabled:bg-primary-300"> {isGenerating ? 'Generating...' : 'Generate Random Graph Task'} </button>}

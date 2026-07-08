@@ -108,7 +108,7 @@ const WritingTask2 = ({ apiKey }) => {
                     ) : (
                         <>
                             <div>
-                                <p className="text-sm text-slate-500">Time Remaining</p>
+                                <p className="text-sm text-slate-500">Time Left</p>
                                 <p className={`font-roboto-mono text-3xl font-bold ${timeLeft <= 300 ? 'text-red-500 blinking' : 'text-slate-700'}`}>{formatTime(timeLeft)}</p>
                             </div>
                             <div className="border-l h-10 border-slate-200"></div>
