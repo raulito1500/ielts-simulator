@@ -291,18 +291,18 @@ const WritingTask1 = ({ apiKey }) => {
                     <p className="text-sm text-slate-600 mb-4">You should spend about 20 minutes on this task. Summarise the information by selecting and reporting the main features. Write at least 150 words.</p>
                     <div className="flex-grow flex items-center justify-center bg-slate-50 rounded-lg p-2">
                         {imageUrl ? <img src={imageUrl} alt="Task Graph" className="max-h-full max-w-full object-contain rounded-md cursor-pointer" onClick={() => setIsImageModalOpen(true)} />
-                        : !timerActive && !isTimeUp && <button onClick={handleGenerateTask} disabled={isGenerating} className="px-5 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 disabled:bg-primary-300"> {isGenerating ? 'Generating...' : 'Generate Random Graph Task'} </button>}
+                            : !timerActive && !isTimeUp && <button onClick={handleGenerateTask} disabled={isGenerating} className="px-5 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 disabled:bg-primary-300"> {isGenerating ? 'Generating...' : 'Generate Random Graph Task'} </button>}
                         {timerActive && !imageUrl && <p className="text-slate-500 text-center">Writing session started with your own material.</p>}
                     </div>
                 </div>
                 <div className="bg-white p-4 rounded-xl border border-slate-200 grid grid-cols-2 gap-3 shadow-sm">
-                   {!isTimeUp && <button onClick={() => setShowConfirmModal(true)} className="col-span-2 w-full p-3 bg-red-100 text-red-700 font-semibold rounded-lg hover:bg-red-200">End Session</button>}
+                    {!isTimeUp && <button onClick={() => setShowConfirmModal(true)} className="col-span-2 w-full p-3 bg-red-100 text-red-700 font-semibold rounded-lg hover:bg-red-200">End Session</button>}
                     <button onClick={handleReset} className="w-full p-3 bg-slate-100 text-slate-700 font-semibold rounded-lg hover:bg-slate-200">Reset Session</button>
                     <button onClick={handleGrade} disabled={!isTimeUp || !text.trim() || gradeButtonClicked} className="w-full p-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 disabled:bg-gray-300 flex items-center justify-center"> {isGrading && <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>} {isGrading ? 'Grading...' : 'Grade'} </button>
-                     {score && (
+                    {score && (
                         <>
                             <div className="col-span-2 border-t my-2"></div>
-                            <button onClick={handleCopy} className="relative w-full p-3 bg-primary-100 text-primary-700 font-semibold rounded-lg hover:bg-primary-200 flex items-center justify-center gap-2"> <ICONS.COPY className="w-5 h-5"/> Copy Text {showCopyMessage && <span className="absolute -top-8 bg-slate-800 text-white text-xs px-2 py-1 rounded">Copied!</span>} </button>
+                            <button onClick={handleCopy} className="relative w-full p-3 bg-primary-100 text-primary-700 font-semibold rounded-lg hover:bg-primary-200 flex items-center justify-center gap-2"> <ICONS.COPY className="w-5 h-5" /> Copy Text {showCopyMessage && <span className="absolute -top-8 bg-slate-800 text-white text-xs px-2 py-1 rounded">Copied!</span>} </button>
                             <button onClick={handleDownloadPdf} className="w-full p-3 bg-primary-100 text-primary-700 font-semibold rounded-lg hover:bg-primary-200 flex items-center justify-center gap-2"> <ICONS.DOWNLOAD className="w-5 h-5" /> PDF Report </button>
                         </>
                     )}
@@ -311,7 +311,7 @@ const WritingTask1 = ({ apiKey }) => {
             <div className="w-[62%] flex-grow flex flex-col">
                 <div ref={writingSheetRef} className="bg-paper border border-yellow-200 shadow-inner flex-grow p-8 leading-relaxed font-roboto-mono text-neutral-900 text-lg overflow-y-auto">
                     {correctedHtml ? <div className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: correctedHtml }}></div>
-                    : <textarea value={text} onChange={handleTextChange} readOnly={isTimeUp} className="w-full h-full bg-transparent border-none outline-none resize-none" placeholder="Start typing..."/>}
+                        : <textarea value={text} onChange={handleTextChange} readOnly={isTimeUp} className="w-full h-full bg-transparent border-none outline-none resize-none" placeholder="Start typing..." />}
                 </div>
             </div>
             {isImageModalOpen && <ImageModal imageUrl={imageUrl} onClose={() => setIsImageModalOpen(false)} />}

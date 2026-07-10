@@ -3,7 +3,7 @@ import { ICONS, navigationStructure } from '../constants/navigation';
 
 const Sidebar = ({ activeView, setActiveView }) => {
     return (
-        <nav className="w-24 min-w-24 bg-white border-r border-slate-100 flex flex-col items-center py-6 gap-2">
+        <nav className="w-24 min-w-24 bg-white border-r border-slate-200 flex flex-col items-center py-6 gap-2">
             <div className="w-12 h-12 bg-primary-600 shadow-md shadow-primary-600 rounded-full mb-6 flex items-center justify-center text-white font-bold text-xl">I</div>
             {navigationStructure.map(item => {
                 const Icon = ICONS[item.icon];

@@ -40,7 +40,7 @@ export default function App() {
         <div className="flex h-screen bg-slate-50 text-gray-800">
             <Sidebar activeView={activeView} setActiveView={setActiveView} />
 
-            <main className="w-full p-6 flex gap-6 overflow-y-auto">
+            <main className="w-full p-6 flex gap-6 overflow-y-auto bg-slate-50">
                 {renderActiveView()}
             </main>
         </div>
