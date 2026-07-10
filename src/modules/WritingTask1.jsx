@@ -276,7 +276,7 @@ const WritingTask1 = ({ apiKey }) => {
                         <>
                             <div>
                                 <p className="text-sm text-slate-500">Time Left</p>
-                                <p className={`font-roboto-mono text-3xl font-bold ${timeLeft <= 300 ? 'text-red-500 blinking' : 'text-slate-700'}`}>{formatTime(timeLeft)}</p>
+                                <p className={`font-roboto-mono text-3xl font-bold ${timeLeft <= 300 ? 'text-red-500 animate-blink' : 'text-slate-700'}`}>{formatTime(timeLeft)}</p>
                             </div>
                             <div className="border-l h-10 border-slate-200"></div>
                             <div>
@@ -309,7 +309,7 @@ const WritingTask1 = ({ apiKey }) => {
                 </div>
             </div>
             <div className="w-[62%] flex-grow flex flex-col">
-                <div ref={writingSheetRef} className="bg-[#FFFBF0] border border-yellow-200 shadow-inner flex-grow p-8 leading-relaxed font-roboto-mono text-[#1a1a1a] text-lg overflow-y-auto">
+                <div ref={writingSheetRef} className="bg-paper border border-yellow-200 shadow-inner flex-grow p-8 leading-relaxed font-roboto-mono text-neutral-900 text-lg overflow-y-auto">
                     {correctedHtml ? <div className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: correctedHtml }}></div>
                     : <textarea value={text} onChange={handleTextChange} readOnly={isTimeUp} className="w-full h-full bg-transparent border-none outline-none resize-none" placeholder="Start typing..."/>}
                 </div>

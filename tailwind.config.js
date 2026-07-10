@@ -19,10 +19,16 @@ module.exports = {
           900: '#134e4a',
           950: '#042f2e',
         },
+        paper: '#fffbf0',
+      },
+      fontFamily: {
+        'roboto-mono': ['Roboto Mono', 'monospace'],
       },
       fontSize: {
         'xs': '11px',
       },
+      animation: { blink: 'blink 1s linear infinite' },
+      keyframes: { blink: { '50%': { opacity: '0' } } }
     },
 
   },
