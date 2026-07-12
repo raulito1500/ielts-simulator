@@ -19,7 +19,12 @@ module.exports = {
           900: '#134e4a',
           950: '#042f2e',
         },
-        paper: '#fffbf0',
+        paper: {
+          DEFAULT: '#fffbf0',
+          edge: '#efe7cf',
+          rule: '#efe9da',
+          text: '#3a3327',
+        },
       },
       fontFamily: {
         'roboto-mono': ['Roboto Mono', 'monospace'],

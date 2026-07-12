@@ -7,7 +7,7 @@ const StatCard = ({ hasScore, overallScore, onOpenFeedback, timeLeft, totalTime,
         <div className="bg-white py-5 rounded-2xl border border-slate-100 flex justify-around items-center text-center shadow-slate-90/4 shadow-sm">
             {hasScore ? (
                 <>
-                    <div className="w-full" onClick={onOpenFeedback}>
+                    <div className="w-full hover:cursor-pointer" onClick={onOpenFeedback}>
                         <p className="text-xs text-slate-500">Overall Estimated Band Score</p>
                         <p className="text-5xl font-bold text-primary-600">{overallScore}</p>
                         <p className="text-xs text-slate-400 mt-1">Click for detailed feedback</p>

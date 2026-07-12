@@ -9,6 +9,7 @@ import FeedbackModal from '../components/modals/FeedbackModal';
 import ConfirmationModal from '../components/modals/ConfirmationModal';
 import ErrorModal from '../components/modals/ErrorModal';
 import StatCard from '../components/writing/StatCard';
+import AnswerSheet from '../components/writing/AnswerSheet';
 
 const WritingTask1 = ({ apiKey }) => {
     const [text, setText] = useState('');
@@ -25,6 +26,7 @@ const WritingTask1 = ({ apiKey }) => {
     const [showCopyMessage, setShowCopyMessage] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
+    const [isFocused, setIsFocused] = useState(false);
 
     const writingSheetRef = useRef(null);
     const initialTimeSpent = useRef(0);
@@ -300,12 +302,17 @@ const WritingTask1 = ({ apiKey }) => {
                     )}
                 </div>
             </div>
-            <div className="w-[62%] flex-grow flex flex-col">
-                <div ref={writingSheetRef} className="bg-paper border border-yellow-200 shadow-inner flex-grow p-8 leading-relaxed font-roboto-mono text-neutral-900 text-lg overflow-y-auto">
-                    {correctedHtml ? <div className="whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: correctedHtml }}></div>
-                        : <textarea value={text} onChange={handleTextChange} readOnly={isTimeUp} className="w-full h-full bg-transparent border-none outline-none resize-none" placeholder="Start typing..." />}
-                </div>
-            </div>
+            <AnswerSheet
+                ref={writingSheetRef}
+                value={text}
+                onChange={handleTextChange}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                readOnly={isTimeUp}
+                correctedHtml={correctedHtml}
+                wordCount={wordCount}
+                isFocused={isFocused}
+            />
             {isImageModalOpen && <ImageModal imageUrl={imageUrl} onClose={() => setIsImageModalOpen(false)} />}
             {isFeedbackModalOpen && <FeedbackModal score={score} onClose={() => setIsFeedbackModalOpen(false)} overallScore={calculateOverallScore()} />}
             {showConfirmModal && <ConfirmationModal onConfirm={handleEndSession} onCancel={() => setShowConfirmModal(false)} message="Are you sure you want to end the session?" />}
