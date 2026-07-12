@@ -99,7 +99,7 @@ const WritingTask2 = ({ apiKey }) => {
     return (
         <>
             <div className="w-[30%] min-w-[350px] flex flex-col gap-5">
-                <div className="bg-white p-4 rounded-xl border border-slate-200 flex justify-around items-center text-center shadow-sm">
+                <div className="bg-white p-4 rounded-xl border border-slate-100 flex justify-around items-center text-center shadow-sm">
                     {score ? (
                         <div className="w-full cursor-pointer" onClick={() => setIsFeedbackModalOpen(true)}>
                             <p className="text-sm text-slate-500">Overall Estimated Band Score</p>
@@ -111,7 +111,7 @@ const WritingTask2 = ({ apiKey }) => {
                                 <p className="text-sm text-slate-500">Time Left</p>
                                 <p className={`font-roboto-mono text-3xl font-bold ${timeLeft <= 300 ? 'text-red-500 animate-blink' : 'text-slate-700'}`}>{formatTime(timeLeft)}</p>
                             </div>
-                            <div className="border-l h-10 border-slate-200"></div>
+                            <div className="border-l h-10 border-slate-100"></div>
                             <div>
                                 <p className="text-sm text-slate-500">Word Count</p>
                                 <p className={`font-roboto-mono text-3xl font-bold ${wordCount >= 250 ? 'text-green-600' : 'text-slate-700'}`}>{wordCount}</p>
@@ -119,7 +119,7 @@ const WritingTask2 = ({ apiKey }) => {
                         </>
                     )}
                 </div>
-                <div className="bg-white p-5 rounded-xl border border-slate-200 flex-grow flex flex-col shadow-sm">
+                <div className="bg-white p-5 rounded-xl border border-slate-100 flex-grow flex flex-col shadow-sm">
                     <h2 className="text-lg font-bold mb-3">Academic Task 2</h2>
                     <p className="text-sm text-slate-600 mb-4">You should spend about 40 minutes on this task. Write at least 250 words.</p>
                     <div className="flex-grow flex items-center justify-center bg-slate-50 rounded-lg p-4">
@@ -130,7 +130,7 @@ const WritingTask2 = ({ apiKey }) => {
                         )}
                     </div>
                 </div>
-                <div className="bg-white p-4 rounded-xl border border-slate-200 grid grid-cols-2 gap-3 shadow-sm">
+                <div className="bg-white p-4 rounded-xl border border-slate-100 grid grid-cols-2 gap-3 shadow-sm">
                    {!isTimeUp && <button onClick={() => setShowConfirmModal(true)} className="col-span-2 w-full p-3 bg-red-100 text-red-700 font-semibold rounded-lg hover:bg-red-200">End Session</button>}
                     <button onClick={handleReset} className="w-full p-3 bg-slate-100 text-slate-700 font-semibold rounded-lg hover:bg-slate-200">Reset Session</button>
                     <button onClick={handleGrade} disabled={!isTimeUp || !text.trim() || gradeButtonClicked} className="w-full p-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 disabled:bg-gray-300 flex items-center justify-center"> {isGrading && <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>} {isGrading ? 'Grading...' : 'Grade'} </button>
