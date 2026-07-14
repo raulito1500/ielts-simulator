@@ -1,13 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ICONS, navigationStructure } from './constants/navigation';
-import formatTime from './utils/formatTime';
-import loadScript from './utils/loadScript';
-import useIeltsTimer from './hooks/useIeltsTimer';
-import { gradeWritingTask1Api, gradeWritingTask2Api, generateGraphTaskApi } from './api/gemini';
-import { generateListeningTestPartApi, generateListeningAudioApi } from './api/listening';
-import ImageModal from './components/modals/ImageModal';
-import FeedbackModal from './components/modals/FeedbackModal';
-import ConfirmationModal from './components/modals/ConfirmationModal';
+import React, { useState } from 'react';
 import PlaceholderPage from './components/PlaceholderPage';
 import Sidebar from './components/Sidebar';
 import ListeningFullTest from './modules/ListeningFullTest';
@@ -21,7 +12,6 @@ import WritingTask2 from './modules/WritingTask2';
 // by anyone visiting the live demo. AI features are local-only by design.
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 
-// --- MAIN APP COMPONENT --- //
 export default function App() {
     const [activeView, setActiveView] = useState({ main: 'Writing', sub: 'Task 1' });
 
