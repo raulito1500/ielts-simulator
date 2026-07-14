@@ -1,0 +1,46 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # No REACT_APP_GEMINI_API_KEY is set here on purpose. GitHub Pages is
+      # static hosting, and CRA bakes any REACT_APP_* var into the public JS
+      # bundle it ships. Building without the secret means the live demo has
+      # no key to leak — AI features (grading, task/audio generation) show a
+      # friendly "run this locally with your own key" message instead. Do not
+      # add this as a repo secret to "fix" that message; see README/App.jsx.
+      - run: npm run build
+        env:
+          CI: false
+
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+          # Each deploy is a fresh orphan commit with no parent history. The
+          # gh-pages branch is build output only, so there's no reason to keep
+          # old builds around — this also means a leaked secret in one deploy
+          # can't linger in the branch's history past the next deploy.
+          force_orphan: true

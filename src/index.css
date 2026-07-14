@@ -2,9 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-
-.font-roboto-mono { font-family: 'Roboto Mono', monospace; }
+body { font-family: 'Inter', system-ui, sans-serif; }
 
 .handwritten {
     font-family: 'Caveat', cursive;
@@ -41,6 +39,3 @@ del::after {
     border-bottom: 1.5px solid #ef4444;
     pointer-events: none;
 }
-
-@keyframes blink { 50% { opacity: 0; } }
-.blinking { animation: blink 1s linear infinite; }

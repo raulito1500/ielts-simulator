@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 const useIeltsTimer = (initialTime, onTimeUp) => {
+    const totalTime = useRef(initialTime).current;
     const [timeLeft, setTimeLeft] = useState(initialTime);
     const [timerActive, setTimerActive] = useState(false);
     const timerRef = useRef(null);
@@ -20,8 +21,8 @@ const useIeltsTimer = (initialTime, onTimeUp) => {
     const resetTimer = useCallback(() => {
         clearInterval(timerRef.current);
         setTimerActive(false);
-        setTimeLeft(initialTime);
-    }, [initialTime]);
+        setTimeLeft(totalTime);
+    }, [totalTime]);
 
     useEffect(() => {
         if (timerActive) {
@@ -38,7 +39,7 @@ const useIeltsTimer = (initialTime, onTimeUp) => {
         return () => clearInterval(timerRef.current);
     }, [timerActive, endTimer]);
 
-    return { timeLeft, timerActive, startTimer, endTimer, resetTimer };
+    return { timeLeft, totalTime, timerActive, startTimer, endTimer, resetTimer };
 };
 
 export default useIeltsTimer;

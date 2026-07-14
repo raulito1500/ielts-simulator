@@ -33,7 +33,7 @@ const ListeningFullTest = ({ apiKey }) => {
 
     const handleGenerateNextPart = useCallback(async (part) => {
         if (!apiKey) {
-            setErrorMessage("Please add your Gemini API key at the top of the file to generate the test.");
+            setErrorMessage("This public demo doesn't ship with an API key. Clone the repo and add your own free Gemini key to a local .env file to generate the test.");
             setPhase('not_started');
             return;
         }
@@ -305,11 +305,11 @@ const ListeningFullTest = ({ apiKey }) => {
     return (
         <>
             <div className="w-[30%] min-w-[350px] flex flex-col gap-5">
-                <div className="bg-white p-4 rounded-xl border border-slate-200 text-center shadow-sm">
+                <div className="bg-white p-4 rounded-xl border border-slate-100 text-center shadow-sm">
                     <p className="text-sm text-slate-500">IELTS Listening</p>
                     <p className="text-3xl font-bold text-slate-700">Full Test</p>
                 </div>
-                <div className="bg-white p-5 rounded-xl border border-slate-200 flex-grow flex flex-col shadow-sm">
+                <div className="bg-white p-5 rounded-xl border border-slate-100 flex-grow flex flex-col shadow-sm">
                      <h2 className="text-lg font-bold mb-3">Instructions</h2>
                      <p className="text-sm text-slate-600 mb-4">This test has 4 parts. You will hear each part only once. Answer the questions as you listen.</p>
 
@@ -350,7 +350,7 @@ const ListeningFullTest = ({ apiKey }) => {
                 )}
             </div>
             {errorMessage && <ErrorModal message={errorMessage} onClose={() => setErrorMessage(null)} />}
-            <div className="w-[62%] flex-grow flex flex-col bg-white rounded-xl border border-slate-200 shadow-sm overflow-y-auto">
+            <div className="w-[62%] flex-grow flex flex-col bg-white rounded-xl border border-slate-100 shadow-sm overflow-y-auto">
                 {(phase !== 'finished' && phase !== 'not_started') && testData[`part${currentPart}`] && <div className="p-6">{renderQuestions(currentPart)}</div>}
                 {phase === 'finished' && score !== null && renderResults()}
                 {(phase === 'not_started' || (phase === 'generating' && !testData['part1'])) && <div className="p-6 text-center text-slate-500 flex items-center justify-center h-full">Click "Start Test" to begin.</div>}
