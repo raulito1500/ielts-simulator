@@ -46,7 +46,7 @@ const WritingTask2 = ({ apiKey }) => {
 
     const handleGrade = async () => {
         if (!apiKey) {
-            setErrorMessage("Please add your Gemini API key at the top of the file.");
+            setErrorMessage("This public demo doesn't ship with an API key. Clone the repo and add your own free Gemini key to a local .env file to use this feature.");
             return;
         }
         setIsGrading(true);

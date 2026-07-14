@@ -14,8 +14,11 @@ import ListeningFullTest from './modules/ListeningFullTest';
 import WritingTask1 from './modules/WritingTask1';
 import WritingTask2 from './modules/WritingTask2';
 
-// --- IMPORTANT: ADD YOUR API KEY HERE --- //
+// Read from a local .env file (REACT_APP_GEMINI_API_KEY=...), never committed.
 // Get your free key from Google AI Studio: https://aistudio.google.com/app/apikey
+// The public GitHub Pages build intentionally ships without this key — CRA bakes
+// REACT_APP_* vars into the public JS bundle, so a real key would be extractable
+// by anyone visiting the live demo. AI features are local-only by design.
 const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 
 // --- MAIN APP COMPONENT --- //
