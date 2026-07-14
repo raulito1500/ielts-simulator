@@ -305,11 +305,11 @@ const ListeningFullTest = ({ apiKey }) => {
     return (
         <>
             <div className="w-[30%] min-w-[350px] flex flex-col gap-5">
-                <div className="bg-white p-4 rounded-xl border border-slate-100 text-center shadow-sm">
+                <div className="bg-white p-5 rounded-2xl border border-slate-100 text-center shadow-sm">
                     <p className="text-sm text-slate-500">IELTS Listening</p>
                     <p className="text-3xl font-bold text-slate-700">Full Test</p>
                 </div>
-                <div className="bg-white p-5 rounded-xl border border-slate-100 flex-grow flex flex-col shadow-sm">
+                <div className="bg-white p-5 rounded-2xl border border-slate-100 flex-grow flex flex-col shadow-sm">
                      <h2 className="text-lg font-bold mb-3">Instructions</h2>
                      <p className="text-sm text-slate-600 mb-4">This test has 4 parts. You will hear each part only once. Answer the questions as you listen.</p>
 
