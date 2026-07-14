@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ICONS } from '../constants/navigation';
 import { gradeWritingTask2Api } from '../api/gemini';
 import useIeltsTimer from '../hooks/useIeltsTimer';
 import FeedbackModal from '../components/modals/FeedbackModal';
@@ -7,8 +6,9 @@ import ConfirmationModal from '../components/modals/ConfirmationModal';
 import ErrorModal from '../components/modals/ErrorModal';
 import StatCard from '../components/writing/StatCard';
 import AnswerSheet from '../components/writing/AnswerSheet';
+import ActionGrid from '../components/writing/ActionGrid';
 
-const WritingTask2 = ({ apiKey }) => {
+const WritingTask2 = ({ apiKey, onPhaseChange }) => {
     const [text, setText] = useState('');
     const [wordCount, setWordCount] = useState(0);
     const [isTimeUp, setIsTimeUp] = useState(false);
@@ -98,6 +98,12 @@ const WritingTask2 = ({ apiKey }) => {
         return (Math.round(avg * 2) / 2).toFixed(1);
     };
 
+    const phase = score ? 'graded' : isTimeUp ? 'ended' : timerActive ? 'writing' : 'idle';
+
+    useEffect(() => {
+        onPhaseChange?.(phase);
+    }, [phase, onPhaseChange]);
+
     return (
         <>
             <div className="w-[30%] min-w-[350px] flex flex-col gap-5">
@@ -122,17 +128,19 @@ const WritingTask2 = ({ apiKey }) => {
                         )}
                     </div>
                 </div>
-                <div className="bg-white p-4 rounded-2xl border border-slate-100 grid grid-cols-2 gap-3 shadow-sm">
-                    {!isTimeUp && <button disabled={!timerActive} onClick={() => setShowConfirmModal(true)} className="col-span-2 w-full px-4 py-3 bg-red-100 text-red-700 font-semibold rounded-xl hover:bg-red-200 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed">End Session</button>}
-                    <button onClick={handleReset} className="w-full px-4 py-3 bg-slate-100 text-slate-700 font-semibold rounded-xl hover:bg-slate-200">Reset</button>
-                    <button onClick={handleGrade} disabled={!isTimeUp || !text.trim() || gradeButtonClicked} className="w-full px-4 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed flex items-center justify-center"> {isGrading && <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>} {isGrading ? 'Grading...' : 'Grade'} </button>
-                    {score && (
-                        <>
-                            <div className="col-span-2 border-t my-2"></div>
-                            <button onClick={handleCopy} className="relative w-full p-3 bg-primary-100 text-primary-700 font-semibold rounded-xl hover:bg-primary-200 flex items-center justify-center gap-2"> <ICONS.COPY className="w-5 h-5"/> Copy Text {showCopyMessage && <span className="absolute -top-8 bg-slate-800 text-white text-xs px-2 py-1 rounded">Copied!</span>} </button>
-                        </>
-                    )}
-                </div>
+                <ActionGrid
+                    isTimeUp={isTimeUp}
+                    endSessionDisabled={!timerActive}
+                    onEndSession={() => setShowConfirmModal(true)}
+                    onReset={handleReset}
+                    onGrade={handleGrade}
+                    isGrading={isGrading}
+                    gradeDisabled={!isTimeUp || !text.trim() || gradeButtonClicked}
+                    hasScore={!!score}
+                    onCopy={handleCopy}
+                    showCopyMessage={showCopyMessage}
+                    showPdfButton={false}
+                />
             </div>
             <AnswerSheet
                 ref={writingSheetRef}
