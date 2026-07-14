@@ -4,38 +4,25 @@
 
 body { font-family: 'Inter', system-ui, sans-serif; }
 
-.handwritten {
-    font-family: 'Caveat', cursive;
-    color: #115e59;
-    background-color: #ccfbf1d1;
-    padding: 0 0.3em;
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    position: absolute;
-    left: 50%;
-    bottom: 80%;
-    line-height: 1em;
-    transform: translateX(-50%) translateY(4px);
-    white-space: nowrap;
-    font-size: 1.1em;
-    font-weight: 700;
-    pointer-events: none;
-}
-
-del {
+.graded-essay del {
     color: #ef4444;
-    text-decoration: none;
-    background-color: transparent;
-    position: relative;
-    display: inline-block;
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    opacity: 0.85;
 }
 
-del::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    border-bottom: 1.5px solid #ef4444;
-    pointer-events: none;
+.graded-essay .handwritten {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 1.4em;
+    color: #115e59;
+    background-color: #ccfbf1;
+    padding: 0 0.4em;
+    margin: 0 3px;
+    border-radius: 7px;
+    line-height: 1;
+    display: inline-block;
+    transform: rotate(-1.5deg);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    text-decoration: none;
 }
